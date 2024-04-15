@@ -19,17 +19,4 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - run: brew install llvm@14 #llvm-dev
-      - run: brew link llvm@14
-      - run: ls -lah /opt/homebrew/Cellar/
-      - run: ls -lah /opt/homebrew/Cellar/llvm@14
-      - run: ls -lah /opt/homebrew/Cellar/llvm@14/14.0.6/
-      - run: ls -lah /opt/homebrew/Cellar/llvm@14/14.0.6/bin
-      - run: ls -lah /usr/local/opt/llvm/bin/
-      - run: ls -lah /usr/local/Cellar/
-      - run: ls -lah /usr/local/Cellar/llvm@14
-      - run: ls -lah /usr/local/Cellar/llvm@14/14.0.6/
-      - run: ls -lah /usr/local/Cellar/llvm@14/14.0.6/bin
-      - run: ls -lah /usr/local/opt/llvm/bin/
-      - run: which llvm-config
-      - run: which llvm-config-14
-      - run: cmake . -DLLVM_CONFIG=/usr/local/opt/llvm/bin/llvm-config && make -j$(nproc) && make tests
+      - run: cmake . -DLLVM_CONFIG=/usr/local/Cellar/llvm@14/14.0.6/bin && make -j$(nproc) && make tests
