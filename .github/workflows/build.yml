@@ -34,7 +34,7 @@ jobs:
       - working-directory: llvm-build
         run: ninja
       - uses: actions/checkout@v1
-      - run: cmake .
+      - run: cmake -DLLVM_CONFIG=../llvm-build/bin/llvm-config.exe .
 #  build-macos-14:
 #    runs-on: macos-latest
 #    steps:
