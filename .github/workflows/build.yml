@@ -7,16 +7,16 @@ jobs:
 #      - uses: actions/checkout@v1
 #      - run: sudo apt-get install build-essential llvm-14 llvm-14-dev clang-14 libedit-dev
 #      - run: cmake -DLLVM_CONFIG=/usr/bin/llvm-config-14 . && make && make tests
-#  build-win-14:
-#    runs-on: windows-latest
-#    steps:
-#      - name: Install winget
-#        uses: Cyberboss/install-winget@v1
-#      - uses: actions/checkout@v1
-#      - run: winget install -e --id Kitware.CMake --disable-interactivity --accept-source-agreements
-  build-macos-14:
-    runs-on: macos-latest
+  build-win-14:
+    runs-on: windows-latest
     steps:
+      - uses: Cyberboss/install-winget@v1
       - uses: actions/checkout@v1
-      - run: brew install llvm@14
-      - run: PATH="/usr/local/opt/llvm@14/bin:$PATH" cmake . && make -j$(nproc) && make tests
+      - run: winget install -e --id Kitware.CMake --disable-interactivity --accept-source-agreements
+      - run: cmake .
+#  build-macos-14:
+#    runs-on: macos-latest
+#    steps:
+#      - uses: actions/checkout@v1
+#      - run: brew install llvm@14
+#      - run: PATH="/usr/local/opt/llvm@14/bin:$PATH" cmake . && make -j$(nproc) && make tests
