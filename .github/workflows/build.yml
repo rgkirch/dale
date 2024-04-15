@@ -19,7 +19,4 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - run: brew install llvm@14
-      - run: export PATH="/usr/local/opt/llvm@14/bin:$PATH"
-      - run: echo 'export PATH="/usr/local/opt/llvm@14/bin:$PATH"' >> /Users/runner/.bash_profile
-      - run: ls -lah /usr/local/opt/llvm@14/bin
-      - run: PATH="/usr/local/opt/llvm@14/bin:$PATH" cmake . -DLLVM_CONFIG=/usr/local/Cellar/llvm@14/14.0.6/bin/llvm-config && make -j$(nproc) && make tests
+      - run: PATH="/usr/local/opt/llvm@14/bin:$PATH" cmake . && make -j$(nproc) && make tests
