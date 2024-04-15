@@ -19,6 +19,6 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - run: brew install llvm@14 #llvm-dev
-      - run: llvm-config
-      - run: which llvm-config
+      - run: llvm-config-14
+      - run: which llvm-config-14
       - run: cmake . && make -j$(nproc) && make tests
