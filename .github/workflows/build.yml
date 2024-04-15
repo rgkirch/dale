@@ -21,7 +21,7 @@ jobs:
           arch: amd64
       - uses: microsoft/setup-msbuild@v2
       - uses: Cyberboss/install-winget@v1
-      - run: winget install -e --id Kitware.CMake --disable-interactivity --accept-source-agreements
+      - uses: lukka/get-cmake@latest
       - run: Invoke-WebRequest -Uri https://codeload.github.com/llvm/llvm-project/tar.gz/refs/tags/llvmorg-14.0.6 -OutFile llvm-project.tar.gz
       - run: ls
       - run: mkdir temp
