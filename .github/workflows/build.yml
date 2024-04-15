@@ -18,5 +18,6 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v1
-      - run: brew install llvm@14 #llvm-dev
-      - run: cmake . -DLLVM_CONFIG=/usr/local/Cellar/llvm@14/14.0.6/bin && make -j$(nproc) && make tests
+      - run: brew install llvm@14
+      - run: export PATH="/usr/local/opt/llvm@14/bin:$PATH"
+      - run: cmake . && make -j$(nproc) && make tests
