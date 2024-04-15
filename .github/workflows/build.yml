@@ -16,11 +16,21 @@ jobs:
     runs-on: windows-latest
     steps:
       - run: Invoke-WebRequest -Uri https://codeload.github.com/llvm/llvm-project/tar.gz/refs/tags/llvmorg-14.0.6 -OutFile llvm-project.tar.gz
+      - run: pwd
+      - run: ls
       - run: mkdir llvm-project
       - run: tar -xf llvm-project.tar.gz -C llvm-project
+      - run: pwd
+      - run: ls
       - run: cd llvm-project
+      - run: pwd
+      - run: ls
       - run: mv ./*/* ./
-      - run: cmake .
+      - run: pwd
+      - run: ls
+      - run: cmake -S llvm -B build -G "Visual Studio 16 2019" -A x64 -DLLVM_ENABLE_PROJECTS='clang' -DCMAKE_BUILD_TYPE=Release
+      - run: pwd
+      - run: ls
       - uses: Cyberboss/install-winget@v1
       - uses: actions/checkout@v1
       - run: winget install -e --id Kitware.CMake --disable-interactivity --accept-source-agreements
