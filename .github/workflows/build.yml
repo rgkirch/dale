@@ -70,9 +70,8 @@ jobs:
       - uses: actions/checkout@v1
       - run: sudo apt-get install build-essential llvm-14 llvm-14-dev clang-14 libedit-dev
       - run: cmake -DLLVM_CONFIG=/usr/bin/llvm-config-14 . && make && make tests
-build-win-14:
+  build-win-14:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v1
       - run: winget install -e --id Kitware.CMake
-
