@@ -13,6 +13,7 @@ jobs:
 #also see
 #https://github.com/microsoft/winget-cli/issues/3494
   build-win-14:
+    #https://github.com/actions/runner-images/blob/main/images/windows/Windows2019-Readme.md
     runs-on: windows-2019
     steps:
       #https://github.com/llvm/actions/blob/main/setup-windows/vs_setup.bat
@@ -20,7 +21,6 @@ jobs:
         with:
           arch: amd64
       - uses: microsoft/setup-msbuild@v2
-      - uses: lukka/get-cmake@latest
       - run: Invoke-WebRequest -Uri https://codeload.github.com/llvm/llvm-project/tar.gz/refs/tags/llvmorg-14.0.6 -OutFile llvm-project.tar.gz
       - run: ls
       - run: mkdir temp
@@ -30,7 +30,7 @@ jobs:
       - run: rm -r temp
       - run: ls llvm-project
       - working-directory: llvm-project
-        run: cmake -S llvm -B build -G "Visual Studio 17 2022" -A x64 -DLLVM_ENABLE_PROJECTS='clang' -DCMAKE_BUILD_TYPE=Release
+        run: cmake -S llvm -B build -G "Visual Studio 16 2019" -A x64 -DLLVM_ENABLE_PROJECTS='clang' -DCMAKE_BUILD_TYPE=Release
       - run: ls llvm-project
       - working-directory: llvm-project
         run: msbuild Dale.sln
