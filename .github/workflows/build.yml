@@ -13,7 +13,7 @@ jobs:
 #also see
 #https://github.com/microsoft/winget-cli/issues/3494
   build-win-14:
-    runs-on: windows-latest
+    runs-on: windows-2019
     steps:
       - uses: microsoft/setup-msbuild@v2
       - uses: Cyberboss/install-winget@v1
