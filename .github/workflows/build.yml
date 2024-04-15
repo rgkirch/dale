@@ -13,4 +13,4 @@ jobs:
       - name: Install winget
         uses: Cyberboss/install-winget@v1
       - uses: actions/checkout@v1
-      - run: winget install -e --id Kitware.CMake
+      - run: winget install -e --id Kitware.CMake --disable-interactivity --accept-source-agreements
