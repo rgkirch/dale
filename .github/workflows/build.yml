@@ -54,7 +54,8 @@ jobs:
       - run: ../../llvm/bin/llvm-config.exe
       - run: ../../llvm/bin/llvm-config.exe --version
       - uses: actions/checkout@v1
-        path: dale
+        with:
+          path: dale
       - run: cmake -DLLVM_CONFIG="../llvm/bin/llvm-config.exe" .
 #  build-macos-14:
 #    runs-on: macos-latest
