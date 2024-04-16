@@ -23,6 +23,7 @@ jobs:
           arch: amd64
       - name: microsoft setup msbuild
         uses: microsoft/setup-msbuild@v2
+      - uses: actions/checkout@v1
       - uses: actions/cache/restore@v4
         id: cache
         with:
@@ -47,16 +48,12 @@ jobs:
         with:
           path: llvm
           key: ${{ runner.os }}
-      - uses: actions/checkout@v1
-        with:
-          path: elad
-          clean: false
       - run: pwd
       - run: ls
       - run: ls ..
       - run: ls ../..
-      - run: ../../llvm/bin/llvm-config.exe
-      - run: ../../llvm/bin/llvm-config.exe --version
+      - run: llvm/bin/llvm-config.exe
+      - run: llvm/bin/llvm-config.exe --version
       - run: cmake -DLLVM_CONFIG="../llvm/bin/llvm-config.exe" .
 #  build-macos-14:
 #    runs-on: macos-latest
