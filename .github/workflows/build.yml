@@ -50,7 +50,9 @@ jobs:
       - uses: actions/checkout@v1
       - run: pwd
       - run: ls
-      - run: cmake -DLLVM_CONFIG="%GITHUB_WORKSPACE%/llvm/bin/llvm-config.exe" .
+      - run: ../llvm/bin/llvm-config.exe
+      - run: ../llvm/bin/llvm-config.exe --version
+      - run: cmake -DLLVM_CONFIG="../llvm/bin/llvm-config.exe" .
 #  build-macos-14:
 #    runs-on: macos-latest
 #    steps:
