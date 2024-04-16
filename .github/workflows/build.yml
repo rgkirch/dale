@@ -17,24 +17,43 @@ jobs:
     runs-on: windows-2019
     steps:
       #https://github.com/llvm/actions/blob/main/setup-windows/vs_setup.bat
-      - uses: llvm/actions/setup-windows@main
+      - name: llvm setup windows
+        uses: llvm/actions/setup-windows@main
         with:
           arch: amd64
-      - uses: microsoft/setup-msbuild@v2
-      - run: Invoke-WebRequest -Uri https://codeload.github.com/llvm/llvm-project/tar.gz/refs/tags/llvmorg-14.0.6 -OutFile llvm-project.tar.gz
-      - run: ls
-      - run: mkdir temp
-      - run: tar -xf llvm-project.tar.gz -C temp
-      - run: mkdir llvm-project
-      - run: mv temp/*/* llvm-project
-      - run: rm -r temp
-      - run: ls llvm-project
-      - run: mkdir llvm-build
-      - run: cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DLLVM_ENABLE_PROJECTS='clang' -S .\llvm-project\llvm\ -B llvm-build
-      - working-directory: llvm-build
-        run: ninja
+      - name: microsoft setup msbuild
+        uses: microsoft/setup-msbuild@v2
+      - name: download llvm-project.tar.gz
+        run: Invoke-WebRequest -Uri https://codeload.github.com/llvm/llvm-project/tar.gz/refs/tags/llvmorg-14.0.6 -OutFile llvm-project.tar.gz
+      - name: cache llvm project build
+        uses: actions/cache@v4
+        id: cache
+        with:
+          path: llvm
+          key: ${{ runner.os }}-${{ hashFiles('llvm-project.tar.gz') }}
+      - name: build llvm project if not cached
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          ls
+          mkdir temp
+          tar -xf llvm-project.tar.gz -C temp
+          rm llvm-project.tar.gz
+          mkdir llvm-project
+          mv temp/*/* llvm-project
+          rm -r temp
+          ls llvm-project
+          cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DLLVM_ENABLE_PROJECTS='clang' -S .\llvm-project\llvm\ -B llvm
+          rm -r llvm-project
+      - working-directory: llvm
+        run: |
+          pwd
+          ls
+          ninja
       - uses: actions/checkout@v1
-      - run: cmake -DLLVM_CONFIG=../llvm-build/bin/llvm-config.exe .
+      - run: |
+          pwd
+          ls
+          cmake -DLLVM_CONFIG=..\llvm\bin\llvm-config.exe .
 #  build-macos-14:
 #    runs-on: macos-latest
 #    steps:
