@@ -24,17 +24,14 @@ jobs:
       - name: microsoft setup msbuild
         uses: microsoft/setup-msbuild@v2
       - name: download llvm-project.tar.gz
-        run: |
-          pwd
-          ls
-          Invoke-WebRequest -Uri https://codeload.github.com/llvm/llvm-project/tar.gz/refs/tags/llvmorg-14.0.6 -OutFile llvm-project.tar.gz
+        run: Invoke-WebRequest -Uri https://codeload.github.com/llvm/llvm-project/tar.gz/refs/tags/llvmorg-14.0.6 -OutFile llvm-project.tar.gz
       - name: cache llvm project build
         uses: actions/cache@v4
         id: cache
         with:
           path: llvm
           key: ${{ runner.os }}-${{ hashFiles('llvm-project.tar.gz') }}
-      - name: build llvm project if not cached
+      - name: run cmake to allow building llvm project if not cached
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
           ls
@@ -46,12 +43,14 @@ jobs:
           rm -r temp
           ls llvm-project
           cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DLLVM_ENABLE_PROJECTS='clang' -S .\llvm-project\llvm\ -B llvm
-          rm -r llvm-project
       - working-directory: llvm
-        run: |
-          pwd
-          ls
-          ninja
+        name: show what's in directory llvm
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: ls
+      - working-directory: llvm
+        name: build llvm with ninja
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: ninja
       - uses: actions/checkout@v1
       - run: |
           pwd
