@@ -43,7 +43,6 @@ jobs:
           cd llvm
           ninja
       - uses: actions/cache/save@v4
-        id: cache
         if: always()
         with:
           path: llvm
