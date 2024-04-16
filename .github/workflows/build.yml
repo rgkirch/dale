@@ -23,19 +23,15 @@ jobs:
           arch: amd64
       - name: microsoft setup msbuild
         uses: microsoft/setup-msbuild@v2
-      - name: download llvm-project.tar.gz
-        run: Invoke-WebRequest -Uri https://codeload.github.com/llvm/llvm-project/tar.gz/refs/tags/llvmorg-14.0.6 -OutFile llvm-project.tar.gz
-      - name: cache llvm project build
-        uses: actions/cache@v4
+      - uses: actions/cache/restore@v4
         id: cache
         with:
-          save-always: true
           path: llvm
           key: ${{ runner.os }}
-      - name: run cmake to allow building llvm project if not cached
+      - name: populate llvm if not cached
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
-          ls
+          Invoke-WebRequest -Uri https://codeload.github.com/llvm/llvm-project/tar.gz/refs/tags/llvmorg-14.0.6 -OutFile llvm-project.tar.gz
           mkdir temp
           tar -xf llvm-project.tar.gz -C temp
           rm llvm-project.tar.gz
@@ -44,14 +40,14 @@ jobs:
           rm -r temp
           ls llvm-project
           cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DLLVM_ENABLE_PROJECTS='clang' -S .\llvm-project\llvm\ -B llvm
-      - working-directory: llvm
-        name: show what's in directory llvm
-        if: steps.cache.outputs.cache-hit != 'true'
-        run: ls
-      - working-directory: llvm
-        name: build llvm with ninja
-        if: steps.cache.outputs.cache-hit != 'true'
-        run: ninja
+          cd llvm
+          ninja
+      - uses: actions/cache/save@v4
+        id: cache
+        if: always()
+        with:
+          path: llvm
+          key: ${{ runner.os }}
       - uses: actions/checkout@v1
       - run: pwd
       - run: ls
