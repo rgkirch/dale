@@ -53,10 +53,9 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
         run: ninja
       - uses: actions/checkout@v1
-      - run: |
-          pwd
-          ls
-          cmake -DLLVM_CONFIG="../llvm/bin/llvm-config.exe" .
+      - run: pwd
+      - run: ls
+      - run: cmake -DLLVM_CONFIG="../llvm/bin/llvm-config.exe" .
 #  build-macos-14:
 #    runs-on: macos-latest
 #    steps:
