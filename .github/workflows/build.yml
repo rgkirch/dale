@@ -49,7 +49,7 @@ jobs:
           key: ${{ runner.os }}
       - uses: actions/checkout@v1
         with:
-          path: dale
+          path: ./dalep
       - run: pwd
       - run: ls
       - run: ls ..
