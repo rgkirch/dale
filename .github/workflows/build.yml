@@ -49,6 +49,7 @@ jobs:
           key: ${{ runner.os }}
       - uses: actions/checkout@v1
         with:
+          path: elad
           clean: false
       - run: pwd
       - run: ls
