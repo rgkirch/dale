@@ -23,11 +23,10 @@ jobs:
           arch: amd64
       - name: microsoft setup msbuild
         uses: microsoft/setup-msbuild@v2
-      - uses: actions/checkout@v1
       - uses: actions/cache/restore@v4
         id: cache
         with:
-          path: llvm
+          path: ../llvm
           key: ${{ runner.os }}
       - name: populate llvm if not cached
         if: steps.cache.outputs.cache-hit != 'true'
@@ -40,20 +39,17 @@ jobs:
           mv temp/*/* llvm-project
           rm -r temp
           ls llvm-project
-          cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DLLVM_ENABLE_PROJECTS='clang' -S .\llvm-project\llvm\ -B llvm
-          cd llvm
+          cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DLLVM_ENABLE_PROJECTS='clang' -S .\llvm-project\llvm\ -B ../llvm
+          cd ../llvm
           ninja
       - uses: actions/cache/save@v4
         if: always()
         with:
-          path: llvm
+          path: ../llvm
           key: ${{ runner.os }}
-      - run: pwd
-      - run: ls
-      - run: ls ..
-      - run: ls ../..
-      - run: llvm/bin/llvm-config.exe
-      - run: llvm/bin/llvm-config.exe --version
+      - uses: actions/checkout@v1
+      - run: ../llvm/bin/llvm-config.exe
+      - run: ../llvm/bin/llvm-config.exe --version
       - run: cmake -DLLVM_CONFIG="../llvm/bin/llvm-config.exe" .
 #  build-macos-14:
 #    runs-on: macos-latest
