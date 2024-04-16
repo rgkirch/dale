@@ -47,12 +47,14 @@ jobs:
         with:
           path: llvm
           key: ${{ runner.os }}
-      - uses: actions/checkout@v1
       - run: pwd
       - run: ls
+      - run: ls ..
+      - run: ls ../llvm
       - run: ls ../llvm/bin/
       - run: ../llvm/bin/llvm-config.exe
       - run: ../llvm/bin/llvm-config.exe --version
+      - uses: actions/checkout@v1
       - run: cmake -DLLVM_CONFIG="../llvm/bin/llvm-config.exe" .
 #  build-macos-14:
 #    runs-on: macos-latest
