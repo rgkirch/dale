@@ -90,16 +90,14 @@ jobs:
           clean: false
       - run: pwd
       - run: ls
+      - name: install meson since it's needed for pkgconf
+        run: pip3 install meson
       - name: clone pkgconf
         uses: actions/checkout@v4
         with:
           repository: pkgconf/pkgconf
           path: pkgconf
           clean: false
-      - name: install meson since it's needed for pkgconf
-        run: |
-          Invoke-WebRequest -Uri https://github.com/mesonbuild/meson/releases/download/1.4.0/meson-1.4.0-64.msi -OutFile meson.msi
-          .\meson.msi
       - name: build and install pkgconf since it's needed for dale
         run: |
           cd pkgconf
