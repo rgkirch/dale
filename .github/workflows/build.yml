@@ -69,7 +69,7 @@ jobs:
     #https://github.com/actions/runner-images/blob/main/images/windows/Windows2019-Readme.md
     runs-on: windows-2019
     steps:
-      - run: vcpkg install pkgconf
+      - run: vcpkg install pkgconf libffi
       #https://github.com/llvm/actions/blob/main/setup-windows/vs_setup.bat
       - name: llvm setup windows
         uses: llvm/actions/setup-windows@main
