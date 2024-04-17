@@ -26,7 +26,7 @@ jobs:
       - uses: actions/cache/restore@v4
         id: cache
         with:
-          path: llvm-bin
+          path: llvm-build
           key: ${{ runner.os }}
       - uses: actions/checkout@v4
         if: steps.cache.outputs.cache-hit != 'true'
@@ -41,7 +41,7 @@ jobs:
       - run: ls llvm-project
       - uses: actions/checkout@v4
         with:
-          path: dalep
+          path: dale
       - run: pwd
       - run: ls
       - name: populate llvm if not cached
@@ -50,14 +50,13 @@ jobs:
           cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DLLVM_ENABLE_PROJECTS='clang' -S .\llvm-project\llvm\ -B llvm-build
           cd llvm-build
           ninja
-          cp -a llvm-build/bin llvm-bin
       - uses: actions/cache/save@v4
         if: always()
         with:
-          path: llvm-bin
+          path: llvm-build
           key: ${{ runner.os }}
-      - run: D:/a/dale/llvm-bin/llvm-config.exe --version
-      - run: cmake -DLLVM_CONFIG="D:/a/dale/llvm-bin/llvm-config.exe" -G Ninja .
+      - run: D:/a/dale/dale/llvm-build/bin/llvm-config.exe --version
+      - run: cmake -DLLVM_CONFIG="D:/a/dale/dale/llvm-build/bin/llvm-config.exe" -G Ninja -S dale -B dale-build
 #  build-macos-14:
 #    runs-on: macos-latest
 #    steps:
