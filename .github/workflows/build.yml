@@ -61,22 +61,21 @@ jobs:
 #      - uses: actions/checkout@v1
 #      - run: brew install llvm@14
 #      - run: PATH="/usr/local/opt/llvm@14/bin:$PATH" cmake . && make -j$(nproc) && make tests
-#workaround to remove log output from "spinner"
-#https://gist.github.com/asheroto/96bcabe428e8ad134ef204573810041f
-#also see
-#https://github.com/microsoft/winget-cli/issues/3494
   build-win-14:
     #https://github.com/actions/runner-images/blob/main/images/windows/Windows2019-Readme.md
     runs-on: windows-2019
     steps:
+      - uses: actions/cache/restore@v4
+        id: vcpkg-cache
+        with:
+          path: llvm-build
+          key: 1
       - run: vcpkg install pkgconf libffi
       #https://github.com/llvm/actions/blob/main/setup-windows/vs_setup.bat
       - name: llvm setup windows
         uses: llvm/actions/setup-windows@main
         with:
           arch: amd64
-#      - name: microsoft setup msbuild
-#        uses: microsoft/setup-msbuild@v2
       - uses: actions/cache/restore@v4
         id: cache
         with:
@@ -105,8 +104,6 @@ jobs:
         with:
           path: llvm-build
           key: 1
-      # https://github.com/actions/runner-images/issues/9693
-      - run: D:\a\dale\dale\llvm-build\bin\llvm-config.exe --version
       - run: cmake -DCMAKE_TOOLCHAIN_FILE=c:/vcpkg/scripts/buildsystems/vcpkg.cmake -DLLVM_CONFIG="D:\a\dale\dale\llvm-build\bin\llvm-config.exe" -G Ninja -S dale -B dale-build
       - run: |
           cd dale-build
