@@ -112,8 +112,8 @@ jobs:
       - name: populate llvm if not cached
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
-          $Env:PKG_CONFIG_PATH = 'D:\a\dale\dale\pkg-conf\build\pkgconf.exe'
-          $Env:PATH += 'D:\a\dale\dale\pkg-conf\build\pkgconf.exe'
+          $env:PKG_CONFIG_PATH = "D:\a\dale\dale\pkg-conf\build\pkgconf.exe"
+          $env:PATH += ";D:\a\dale\dale\pkg-conf\build\pkgconf.exe"
           cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DLLVM_ENABLE_PROJECTS='clang' -S .\llvm-project\llvm\ -B llvm-build
           cd llvm-build
           ninja
