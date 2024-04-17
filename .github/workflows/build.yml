@@ -86,7 +86,7 @@ jobs:
         id: cache
         with:
           path: llvm-build
-          key: 1
+          key: llvm-build
       - if: steps.cache.outputs.cache-hit != 'true'
         uses: actions/checkout@v4
         with:
@@ -104,7 +104,7 @@ jobs:
         if: always()
         with:
           path: llvm-build
-          key: 1
+          key: llvm-build
       - uses: actions/checkout@v4
         with:
           path: dale
