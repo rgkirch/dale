@@ -108,3 +108,6 @@ jobs:
       # https://github.com/actions/runner-images/issues/9693
       - run: D:\a\dale\dale\llvm-build\bin\llvm-config.exe --version
       - run: cmake -DCMAKE_TOOLCHAIN_FILE=c:/vcpkg/scripts/buildsystems/vcpkg.cmake -DLLVM_CONFIG="D:\a\dale\dale\llvm-build\bin\llvm-config.exe" -G Ninja -S dale -B dale-build
+      - run: |
+          cd dale-build
+          ninja
