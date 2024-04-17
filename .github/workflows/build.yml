@@ -27,7 +27,7 @@ jobs:
         id: cache
         with:
           path: llvm-build
-          key: ${{ runner.os }}
+          key: 1
       - uses: actions/checkout@v4
         if: steps.cache.outputs.cache-hit != 'true'
         with:
@@ -53,7 +53,7 @@ jobs:
         if: always()
         with:
           path: llvm-build
-          key: ${{ runner.os }}
+          key: 1
       - run: D:/a/dale/dale/llvm-build/bin/llvm-config.exe --version
       - run: cmake -DLLVM_CONFIG="D:/a/dale/dale/llvm-build/bin/llvm-config.exe" -G Ninja -S dale -B dale-build
 #  build-macos-14:
