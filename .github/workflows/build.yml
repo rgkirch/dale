@@ -90,7 +90,6 @@ jobs:
           clean: false
       - run: pwd
       - run: ls
-      - run: ls llvm-project
       - uses: actions/checkout@v4
         with:
           path: dale
