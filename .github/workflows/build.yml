@@ -26,7 +26,7 @@ jobs:
       - uses: actions/cache/restore@v4
         id: cache
         with:
-          path: ../llvm
+          path: llvm
           key: ${{ runner.os }}
       - name: populate llvm if not cached
         if: steps.cache.outputs.cache-hit != 'true'
@@ -45,9 +45,12 @@ jobs:
       - uses: actions/cache/save@v4
         if: always()
         with:
-          path: ../llvm
+          path: llvm
           key: ${{ runner.os }}
       - uses: actions/checkout@v1
+        with:
+          path: dalep/dalep
+          clean: false
       - run: ../llvm/bin/llvm-config.exe --version
       - run: cmake -DLLVM_CONFIG="../llvm/bin/llvm-config.exe" -G Ninja .
 #  build-macos-14:
