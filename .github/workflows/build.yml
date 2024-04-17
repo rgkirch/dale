@@ -70,6 +70,7 @@ jobs:
     runs-on: windows-2019
     steps:
       #https://github.com/llvm/actions/blob/main/setup-windows/vs_setup.bat
+      - run: vcpkg install pkgconf
       - name: llvm setup windows
         uses: llvm/actions/setup-windows@main
         with:
@@ -88,7 +89,6 @@ jobs:
           ref: llvmorg-14.0.6
           path: llvm-project
           clean: false
-      - run: vcpkg install pkgconf
       - uses: actions/checkout@v4
         with:
           path: dale
