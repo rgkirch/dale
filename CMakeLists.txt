@@ -172,7 +172,7 @@ if(CMAKE_COMPILER_IS_GNUCXX)
 else ()
     message(STATUS "not gcc")
     set (CMAKE_CXX_FLAGS         "$ENV{CPPFLAGS} ${FFI_CFLAGS}")
-    set (CMAKE_CXX_FLAGS_DEBUG "/Wall ${CXX_FLAGS_EXTRA}")
+    set (CMAKE_CXX_FLAGS_DEBUG "/Wall")
 endif(CMAKE_COMPILER_IS_GNUCXX)
 
 set (CMAKE_CXX_FLAGS_RELEASE "-O3 -fno-rtti -fomit-frame-pointer ${CXX_FLAGS_EXTRA}")
