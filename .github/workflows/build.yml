@@ -17,12 +17,12 @@ jobs:
     runs-on: windows-2019
     steps:
       #https://github.com/llvm/actions/blob/main/setup-windows/vs_setup.bat
-#      - name: llvm setup windows
-#        uses: llvm/actions/setup-windows@main
-#        with:
-#          arch: amd64
-      - name: microsoft setup msbuild
-        uses: microsoft/setup-msbuild@v2
+      - name: llvm setup windows
+        uses: llvm/actions/setup-windows@main
+        with:
+          arch: amd64
+#      - name: microsoft setup msbuild
+#        uses: microsoft/setup-msbuild@v2
       - uses: actions/cache/restore@v4
         id: cache
         with:
