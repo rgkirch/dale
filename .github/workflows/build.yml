@@ -96,7 +96,11 @@ jobs:
           repository: pkgconf/pkgconf
           path: pkgconf
           clean: false
-      - name: build and install pkgconf
+      - name: install meson since it's needed for pkgconf
+        run: |
+          Invoke-WebRequest -Uri https://github.com/mesonbuild/meson/releases/download/1.4.0/meson-1.4.0-64.msi -OutFile meson.msi
+          .\meson.msi
+      - name: build and install pkgconf since it's needed for dale
         run: |
           cd pkgconf
           meson setup build -Dtests=disabled
