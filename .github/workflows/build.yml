@@ -47,9 +47,8 @@ jobs:
         with:
           path: llvm
           key: ${{ runner.os }}
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v4
         with:
-          path: dalep/dalep
           clean: false
       - run: ../llvm/bin/llvm-config.exe --version
       - run: cmake -DLLVM_CONFIG="../llvm/bin/llvm-config.exe" -G Ninja .
