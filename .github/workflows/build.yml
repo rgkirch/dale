@@ -49,7 +49,7 @@ jobs:
           key: ${{ runner.os }}
       - uses: actions/checkout@v1
       - run: ../llvm/bin/llvm-config.exe --version
-      - run: cmake -DLLVM_CONFIG="../llvm/bin/llvm-config.exe" .
+      - run: cmake -DLLVM_CONFIG="../llvm/bin/llvm-config.exe" -G Ninja .
 #  build-macos-14:
 #    runs-on: macos-latest
 #    steps:
