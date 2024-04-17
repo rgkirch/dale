@@ -164,13 +164,14 @@ else ()
 endif ()
 
 string(REGEX REPLACE "^ +" "" DALEC_LINK_FLAGS ${DALEC_LINK_FLAGS_})
-set (CMAKE_CXX_FLAGS         "$ENV{CPPFLAGS} ${FFI_CFLAGS} -Wall -ansi")
 #https://stackoverflow.com/a/2274040
 if(CMAKE_COMPILER_IS_GNUCXX)
     message(STATUS "GCC detected")
+    set (CMAKE_CXX_FLAGS         "$ENV{CPPFLAGS} ${FFI_CFLAGS} -Wall -ansi")
     set (CMAKE_CXX_FLAGS_DEBUG "-g -ggdb -O0 -fno-rtti -fno-inline -Wextra -Wno-unused-parameter ${CXX_FLAGS_EXTRA}")
 else ()
     message(STATUS "not gcc")
+    set (CMAKE_CXX_FLAGS         "$ENV{CPPFLAGS} ${FFI_CFLAGS}")
     set (CMAKE_CXX_FLAGS_DEBUG "/Wall ${CXX_FLAGS_EXTRA}")
 endif(CMAKE_COMPILER_IS_GNUCXX)
 
