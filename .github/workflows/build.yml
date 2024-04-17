@@ -74,8 +74,8 @@ jobs:
         uses: llvm/actions/setup-windows@main
         with:
           arch: amd64
-      - name: microsoft setup msbuild
-        uses: microsoft/setup-msbuild@v2
+#      - name: microsoft setup msbuild
+#        uses: microsoft/setup-msbuild@v2
       - uses: actions/cache/restore@v4
         id: cache
         with:
@@ -90,6 +90,18 @@ jobs:
           clean: false
       - run: pwd
       - run: ls
+      - name: clone pkgconf
+        uses: actions/checkout@v4
+        with:
+          repository: pkgconf/pkgconf
+          path: pkgconf
+          clean: false
+      - name: build and install pkgconf
+        run: |
+          cd pkgconf
+          meson setup build -Dtests=disabled
+          meson compile -C build
+          meson install -C build
       - uses: actions/checkout@v4
         with:
           path: dale
