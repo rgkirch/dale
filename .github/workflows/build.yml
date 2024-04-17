@@ -35,9 +35,6 @@ jobs:
           ref: llvmorg-14.0.6
           path: llvm-project
           clean: false
-          sparse-checkout: |
-            llvm
-            clang
       - run: pwd
       - run: ls
       - run: ls llvm-project
