@@ -88,22 +88,33 @@ jobs:
           ref: llvmorg-14.0.6
           path: llvm-project
           clean: false
-      - run: pwd
       - run: ls
       - name: install meson since it's needed for pkgconf
         run: pip3 install meson
-      - name: clone pkgconf
+      - uses: actions/cache/restore@v4
+        id: pkgconf-cache
+        with:
+          path: pkgconf
+          key: pkgconf
+      - if: steps.pkgconf-cache.outputs.cache-hit != 'true'
+        name: clone pkgconf
         uses: actions/checkout@v4
         with:
           repository: pkgconf/pkgconf
           path: pkgconf
           clean: false
-      - name: build and install pkgconf since it's needed for dale
+      - if: steps.pkgconf-cache.outputs.cache-hit != 'true'
+        name: build and install pkgconf since it's needed for dale
         run: |
           cd pkgconf
           meson setup build -Dtests=disabled
           meson compile -C build
           meson install -C build
+      - uses: actions/cache/save@v4
+        if: always()
+        with:
+          path: pkgconf
+          key: pkgconf
       - uses: actions/checkout@v4
         with:
           path: dale
