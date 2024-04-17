@@ -38,7 +38,10 @@ jobs:
           sparse-checkout: llvm
       - run: pwd
       - run: ls
+      - run: ls llvm-project
       - uses: actions/checkout@v4
+        with:
+          path: dalep
       - run: pwd
       - run: ls
       - name: populate llvm if not cached
