@@ -171,7 +171,7 @@ if(CMAKE_COMPILER_IS_GNUCXX)
     set (CMAKE_CXX_FLAGS_DEBUG "-g -ggdb -O0 -fno-rtti -fno-inline -Wextra -Wno-unused-parameter ${CXX_FLAGS_EXTRA}")
 else ()
     message(STATUS "not gcc")
-    set (CMAKE_CXX_FLAGS_DEBUG "/g /ggdb /O0 /fno/rtti /fno/inline /Wno-unused-parameter ${CXX_FLAGS_EXTRA}")
+    set (CMAKE_CXX_FLAGS_DEBUG "/Wall ${CXX_FLAGS_EXTRA}")
 endif(CMAKE_COMPILER_IS_GNUCXX)
 
 set (CMAKE_CXX_FLAGS_RELEASE "-O3 -fno-rtti -fomit-frame-pointer ${CXX_FLAGS_EXTRA}")
