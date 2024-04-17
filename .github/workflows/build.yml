@@ -38,6 +38,9 @@ jobs:
           sparse-checkout: llvm
       - run: pwd
       - run: ls
+      - uses: actions/checkout@v4
+      - run: pwd
+      - run: ls
       - name: populate llvm if not cached
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
@@ -50,9 +53,6 @@ jobs:
         with:
           path: llvm-bin
           key: ${{ runner.os }}
-      - uses: actions/checkout@v4
-      - run: pwd
-      - run: ls
       - run: D:/a/dale/llvm-bin/llvm-config.exe --version
       - run: cmake -DLLVM_CONFIG="D:/a/dale/llvm-bin/llvm-config.exe" -G Ninja .
 #  build-macos-14:
