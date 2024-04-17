@@ -1,5 +1,5 @@
 name: build
-on: push
+on: [push, pull_request]
 jobs:
 # These are failing in Github Actions for some reason.  The error
 # message is simply 'This job failed'.  Disable them for the time
