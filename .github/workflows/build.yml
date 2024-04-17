@@ -69,8 +69,19 @@ jobs:
     #https://github.com/actions/runner-images/blob/main/images/windows/Windows2019-Readme.md
     runs-on: windows-2019
     steps:
-      #https://github.com/llvm/actions/blob/main/setup-windows/vs_setup.bat
+      - run: |
+          execute_process(
+            COMMAND "C:/Program Files/Microsoft Visual Studio/2019/Enterprise/VC/Auxiliary/Build/vcvars64.bat" && set
+            OUTPUT_FILE environment_script_output.txt
+          )
+          file(STRINGS environment_script_output.txt output_lines)
+          foreach(line IN LISTS output_lines)
+            if (line MATCHES "^([a-zA-Z0-9_-]+)=(.*)$")
+              set(ENV{${CMAKE_MATCH_1}} "${CMAKE_MATCH_2}")
+            endif()
+          endforeach()
       - run: vcpkg install pkgconf
+      #https://github.com/llvm/actions/blob/main/setup-windows/vs_setup.bat
       - name: llvm setup windows
         uses: llvm/actions/setup-windows@main
         with:
