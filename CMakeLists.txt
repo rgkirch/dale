@@ -165,7 +165,13 @@ endif ()
 
 string(REGEX REPLACE "^ +" "" DALEC_LINK_FLAGS ${DALEC_LINK_FLAGS_})
 set (CMAKE_CXX_FLAGS         "$ENV{CPPFLAGS} ${FFI_CFLAGS} -Wall -ansi")
-set (CMAKE_CXX_FLAGS_DEBUG   "-g -ggdb -O0 -fno-rtti -fno-inline -Wextra -Wno-unused-parameter ${CXX_FLAGS_EXTRA}")
+set (CMAKE_CXX_FLAGS_DEBUG   "-g -ggdb -O0 -fno-rtti -fno-inline -Wno-unused-parameter ${CXX_FLAGS_EXTRA}")
+#https://stackoverflow.com/a/2274040
+if(CMAKE_COMPILER_IS_GNUCXX)
+    message(STATUS "GCC detected, adding compile flags")
+    set (CMAKE_CXX_FLAGS_DEBUG "-Wextra ${CMAKE_CXX_FLAGS_DEBUG}")
+endif(CMAKE_COMPILER_IS_GNUCXX)
+
 set (CMAKE_CXX_FLAGS_RELEASE "-O3 -fno-rtti -fomit-frame-pointer ${CXX_FLAGS_EXTRA}")
 
 set (DALE_FLAGS_DEBUG   "-O0")
