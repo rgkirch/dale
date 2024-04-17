@@ -88,33 +88,7 @@ jobs:
           ref: llvmorg-14.0.6
           path: llvm-project
           clean: false
-      - run: ls
-      - name: install meson since it's needed for pkgconf
-        run: pip3 install meson
-      - uses: actions/cache/restore@v4
-        id: pkgconf-cache
-        with:
-          path: pkgconf
-          key: pkgconf
-      - if: steps.pkgconf-cache.outputs.cache-hit != 'true'
-        name: clone pkgconf
-        uses: actions/checkout@v4
-        with:
-          repository: pkgconf/pkgconf
-          path: pkgconf
-          clean: false
-      - if: steps.pkgconf-cache.outputs.cache-hit != 'true'
-        name: build and install pkgconf since it's needed for dale
-        run: |
-          cd pkgconf
-          meson setup build -Dtests=disabled
-          meson compile -C build
-          meson install -C build
-      - uses: actions/cache/save@v4
-        if: always()
-        with:
-          path: pkgconf
-          key: pkgconf
+      - run: vcpkg install pkgconf
       - uses: actions/checkout@v4
         with:
           path: dale
@@ -123,8 +97,6 @@ jobs:
       - name: populate llvm if not cached
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
-          $env:PKG_CONFIG_PATH = "D:\a\dale\dale\pkg-conf\build\pkgconf.exe"
-          $env:PATH += ";D:\a\dale\dale\pkg-conf\build\pkgconf.exe"
           cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DLLVM_ENABLE_PROJECTS='clang' -S .\llvm-project\llvm\ -B llvm-build
           cd llvm-build
           ninja
