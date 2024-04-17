@@ -112,6 +112,7 @@ jobs:
       - name: populate llvm if not cached
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
+          PKG_CONFIG_PATH=D:\a\dale\dale\pkg-conf\build\pkgconf.exe
           cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DLLVM_ENABLE_PROJECTS='clang' -S .\llvm-project\llvm\ -B llvm-build
           cd llvm-build
           ninja
@@ -120,5 +121,5 @@ jobs:
         with:
           path: llvm-build
           key: 1
-      - run: D:/a/dale/dale/llvm-build/bin/llvm-config.exe --version
-      - run: cmake -DLLVM_CONFIG="D:/a/dale/dale/llvm-build/bin/llvm-config.exe" -G Ninja -S dale -B dale-build
+      - run: D:\a\dale\dale\llvm-build\bin\llvm-config.exe --version
+      - run: cmake -DLLVM_CONFIG="D:\a\dale\dale\llvm-build\bin\llvm-config.exe" -G Ninja -S dale -B dale-build
