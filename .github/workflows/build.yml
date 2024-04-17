@@ -69,19 +69,6 @@ jobs:
     #https://github.com/actions/runner-images/blob/main/images/windows/Windows2019-Readme.md
     runs-on: windows-2019
     steps:
-      - run: |
-          if ("x" STREQUAL "x")
-            execute_process(
-              COMMAND "C:/Program Files/Microsoft Visual Studio/2019/Enterprise/VC/Auxiliary/Build/vcvars64.bat" && set
-              OUTPUT_FILE environment_script_output.txt
-            )
-            file(STRINGS environment_script_output.txt output_lines)
-            foreach(line IN LISTS output_lines)
-              if (line MATCHES "^([a-zA-Z0-9_-]+)=(.*)$")
-                set(ENV{${CMAKE_MATCH_1}} "${CMAKE_MATCH_2}")
-              endif()
-            endforeach()
-          endif()
       - run: vcpkg install pkgconf
       #https://github.com/llvm/actions/blob/main/setup-windows/vs_setup.bat
       - name: llvm setup windows
@@ -110,7 +97,7 @@ jobs:
       - name: populate llvm if not cached
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
-          cmake -DCMAKE_TOOLCHAIN_FILE=c:/vcpkg/scripts/buildsystems/vcpkg.cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DLLVM_ENABLE_PROJECTS='clang' -S .\llvm-project\llvm\ -B llvm-build
+          cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DLLVM_ENABLE_PROJECTS='clang' -S .\llvm-project\llvm\ -B llvm-build
           cd llvm-build
           ninja
       - uses: actions/cache/save@v4
@@ -118,5 +105,6 @@ jobs:
         with:
           path: llvm-build
           key: 1
+      # https://github.com/actions/runner-images/issues/9693
       - run: D:\a\dale\dale\llvm-build\bin\llvm-config.exe --version
-      - run: cmake -DLLVM_CONFIG="D:\a\dale\dale\llvm-build\bin\llvm-config.exe" -G Ninja -S dale -B dale-build
+      - run: cmake -DCMAKE_TOOLCHAIN_FILE=c:/vcpkg/scripts/buildsystems/vcpkg.cmake -DLLVM_CONFIG="D:\a\dale\dale\llvm-build\bin\llvm-config.exe" -G Ninja -S dale -B dale-build
