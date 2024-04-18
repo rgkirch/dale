@@ -4,10 +4,14 @@
 #include <float.h>
 #include <setjmp.h>
 #include <sys/stat.h>
-#include <sys/time.h>
-#include <sys/types.h>
-#include <unistd.h>
 
+#ifdef __unix__
+#include <sys/time.h>
+#endif
+#include <sys/types.h>
+#ifdef __unix__
+#include <unistd.h>
+#endif
 #include <cassert>
 #include <cerrno>
 #include <cstdio>

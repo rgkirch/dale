@@ -2,6 +2,146 @@ cmake_minimum_required(VERSION 3.7)
 
 project(Dale)
 
+message(STATUS "ENV:PKG_CONFIG_MSVC_SYNTAX: $ENV{PKG_CONFIG_MSVC_SYNTAX}")
+
+if(CMAKE_HOST_SYSTEM_NAME STREQUAL "Windows")
+    message (STATUS "detected Windows")
+endif()
+
+#Semicolon-separated list of directories, represented using forward slashes,
+#specifying a search path for CMake modules to be loaded by the include() or
+#find_package() commands before checking the default modules that come with
+#CMake. By default it is empty. It is intended to be set by the project.
+
+# If I can't replace this with a more meaningful default then it should just be
+# an error. I do need to set this.
+set (DEFAULT_CMAKE_MODULE_PATH "C:/Users/User/vcpkg/scripts")
+message (STATUS "SCRIPTS: ${SCRIPTS}")
+message (STATUS "CMAKE_CURRENT_LIST_DIR: ${CMAKE_CURRENT_LIST_DIR}")
+
+include(execute_process)
+#include(vcpkg_acquire_msys)
+#include(vcpkg_add_to_path)
+#include(vcpkg_apply_patches)
+#include(vcpkg_backup_restore_env_vars)
+#include(vcpkg_build_cmake)
+#include(vcpkg_build_make)
+#include(vcpkg_build_msbuild)
+#include(vcpkg_build_ninja)
+#include(vcpkg_build_nmake)
+#include(vcpkg_build_qmake)
+#include(vcpkg_buildpath_length_warning)
+#include(vcpkg_check_features)
+#include(vcpkg_check_linkage)
+#include(vcpkg_clean_executables_in_bin)
+#include(vcpkg_clean_msbuild)
+#include(vcpkg_configure_cmake)
+#include(vcpkg_configure_gn)
+#include(vcpkg_configure_make)
+#include(vcpkg_configure_meson)
+#include(vcpkg_configure_qmake)
+#include(vcpkg_copy_pdbs)
+#include(vcpkg_copy_tool_dependencies)
+#include(vcpkg_copy_tools)
+#include(vcpkg_download_distfile)
+#include(vcpkg_download_sourceforge)
+#include(vcpkg_execute_build_process)
+include(vcpkg_execute_required_process)
+#include(vcpkg_execute_required_process_repeat)
+#include(vcpkg_extract_archive)
+include(vcpkg_extract_source_archive)
+include(vcpkg_extract_source_archive_ex)
+#include(vcpkg_fail_port_install)
+#include(vcpkg_find_acquire_program)
+#include(vcpkg_fixup_cmake_targets)
+#include(vcpkg_fixup_pkgconfig)
+#include(vcpkg_from_bitbucket)
+include(vcpkg_from_git)
+#include(vcpkg_from_github)
+#include(vcpkg_from_gitlab)
+#include(vcpkg_from_sourceforge)
+#include(vcpkg_get_program_files_platform_bitness)
+#include(vcpkg_get_windows_sdk)
+#include(vcpkg_host_path_list)
+#include(vcpkg_install_cmake)
+#include(vcpkg_install_copyright)
+#include(vcpkg_install_gn)
+#include(vcpkg_install_make)
+#include(vcpkg_install_meson)
+#include(vcpkg_install_msbuild)
+#include(vcpkg_install_nmake)
+#include(vcpkg_install_qmake)
+include(vcpkg_list)
+#include(vcpkg_minimum_required)
+#include(vcpkg_replace_string)
+#include(vcpkg_test_cmake)
+
+include(z_vcpkg_apply_patches)
+include(z_vcpkg_forward_output_variable)
+#include(z_vcpkg_function_arguments)
+#include(z_vcpkg_get_cmake_vars)
+include(z_vcpkg_prettify_command_line)
+#include(z_vcpkg_setup_pkgconfig_path)
+
+#include(z_vcpkg_fixup_rpath)
+
+#https://github.com/microsoft/vcpkg/blob/master/scripts/cmake/vcpkg_from_git.cmake
+include(vcpkg_execute_in_download_mode)
+
+if(DEFINED ENV{CMAKE_MODULE_PATH})
+    message (STATUS "CMAKE_MODULE_PATH: ${CMAKE_MODULE_PATH}")
+    message (STATUS "reading CMAKE_MODULE_PATH from the environment: $ENV{CMAKE_MODULE_PATH}")
+    set (CMAKE_MODULE_PATH $ENV{CMAKE_MODULE_PATH})
+elseif (DEFINED CMAKE_MODULE_PATH)
+    message (STATUS "CMAKE_MODULE_PATH: ${CMAKE_MODULE_PATH}")
+else()
+    message (STATUS "using default CMAKE_MODULE_PATH: ${DEFAULT_CMAKE_MODULE_PATH}")
+    set (CMAKE_MODULE_PATH DEFAULT_CMAKE_MODULE_PATH)
+endif()
+
+# I'm not sure that I need this. I'm debugging vcpkg_from_git.
+if(CMAKE_HOST_SYSTEM_NAME STREQUAL "Windows")
+    execute_process (COMMAND "cd.exe"
+                     OUTPUT_VARIABLE CURRENT_WORKING_DIRECTORY
+                     OUTPUT_STRIP_TRAILING_WHITESPACE)
+else()
+    execute_process (COMMAND "pwd"
+                     OUTPUT_VARIABLE CURRENT_WORKING_DIRECTORY
+                     OUTPUT_STRIP_TRAILING_WHITESPACE)
+endif()
+
+message (STATUS "CURRENT_WORKING_DIRECTORY: ${CURRENT_WORKING_DIRECTORY}")
+
+if(DEFINED ENV{DOWNLOADS})
+    message (STATUS "DOWNLOADS: ${DOWNLOADS}")
+    message (STATUS "reading DOWNLOADS from the environment: $ENV{DOWNLOADS}")
+    set (DOWNLOADS $ENV{DOWNLOADS})
+elseif (DEFINED DOWNLOADS)
+    message (STATUS "DOWNLOADS: ${DOWNLOADS}")
+else()
+    message (STATUS "using default DOWNLOADS: ${DEFAULT_DOWNLOADS}")
+    set (DOWNLOADS DEFAULT_DOWNLOADS)
+endif()
+
+#set (ENV{TARGET_TRIPLET} ".")
+
+#We set CURRENT_BUILDTREES_DIR because vcpkg_from_git uses it to set
+#WORKING_DIRECTORY to "${CURRENT_BUILDTREES_DIR}/src/head".
+#set (ENV{CURRENT_BUILDTREES_DIR} CURRENT_WORKING_DIRECTORY)
+
+#set (TARGET_TRIPLET ENV{TARGET_TRIPLET})
+#set (CURRENT_BUILDTREES_DIR ENV{CURRENT_BUILDTREES_DIR})
+
+set(GNULIB_REF "7941742a51e468b0f4ba07c395d0a46528352a81")
+#set(SOURCE_PATH ".")
+vcpkg_from_git(
+    OUT_SOURCE_PATH SOURCE_PATH
+    URL "https://git.savannah.gnu.org/git/gnulib.git"
+    REF "${GNULIB_REF}"
+)
+message (STATUS "SOURCE_PATH: ${SOURCE_PATH}")
+
+
 find_program(LLVM_CONFIG llvm-config DOC "path to llvm-config")
 find_program(CLANG clang DOC "path to clang")
 
@@ -45,6 +185,7 @@ if (NOT Dale_VERSION_REV)
         set (Dale_VERSION_REV 0)
     endif ()
 endif ()
+message (STATUS "CMAKE_INSTALL_PREFIX: ${CMAKE_INSTALL_PREFIX}")
 
 set (Dale_VERSION_MAJOR 0)
 set (Dale_VERSION_MINOR 3)
@@ -93,18 +234,22 @@ execute_process (COMMAND ${LLVM_CONFIG} --libs
                  OUTPUT_VARIABLE LLVM_LIBS
                  OUTPUT_STRIP_TRAILING_WHITESPACE)
 separate_arguments(LLVM_LIBS NATIVE_COMMAND ${LLVM_LIBS})
+message (STATUS "LLVM_LIBS: ${LLVM_LIBS}")
 
 if (${D_LLVM_VERSION_ORD} GREATER 34)
     execute_process (COMMAND ${LLVM_CONFIG} --system-libs
                      OUTPUT_VARIABLE LLVM_SYSTEM_LIBS
                      OUTPUT_STRIP_TRAILING_WHITESPACE)
+    message (STATUS "LLVM_SYSTEM_LIBS: ${LLVM_SYSTEM_LIBS}")
 endif ()
 execute_process (COMMAND ${LLVM_CONFIG} --ldflags
                  OUTPUT_VARIABLE LLVM_LINK_FLAGS
                  OUTPUT_STRIP_TRAILING_WHITESPACE)
+message (STATUS "setting LLVM_LINK_FLAGS to output of ${LLVM_CONFIG} --ldflags: ${LLVM_LINK_FLAGS}")
 execute_process (COMMAND ${LLVM_CONFIG} --cppflags
                  OUTPUT_VARIABLE LLVM_CXX_FLAGS
                  OUTPUT_STRIP_TRAILING_WHITESPACE)
+message (STATUS "setting LLVM_CXX_FLAGS to output of ${LLVM_CONFIG} --cppflags: ${LLVM_CXX_FLAGS}")
 
 # Confirm that ffi.h and libffi are present.
 find_package(PkgConfig REQUIRED)
@@ -141,39 +286,95 @@ if (IS_DEBUG)
 endif ()
 
 # Set compile/link flags.
-set (DALEC_LIBDIR_FLAGS_ "$ENV{LDFLAGS} ${FFI_LDFLAGS}")
-set (DALEC_LIB_FLAGS_    "")
+if(CMAKE_HOST_SYSTEM_NAME STREQUAL "Windows")
+    if(DEFINED ENV{PKG_CONFIG_PATH})
+        message (STATUS "reading PKG_CONFIG_PATH from the environment: $ENV{PKG_CONFIG_PATH}")
+        set (PKG_CONFIG_PATH $ENV{PKG_CONFIG_PATH})
+    elseif(NOT DEFINED PKG_CONFIG_PATH)
+        message (STATUS "PKG_CONFIG_PATH not defined. Setting default PKG_CONFIG_PATH: C:/Users/User/vcpkg/installed/x64-windows/lib/pkgconfig")
+        set (PKG_CONFIG_PATH "C:/Users/User/vcpkg/installed/x64-windows/lib/pkgconfig")
+    endif()
+
+    message (STATUS "ENV:LDFLAGS: $ENV{LDFLAGS}")
+    message (STATUS "LDFLAGS: ${LDFLAGS}")
+    message (STATUS "PKG_CONFIG_LIBDIR: ${PKG_CONFIG_LIBDIR}")
+
+    message (STATUS "populating FFI_LINK_FLAGS from pkgconf.exe --msvc-syntax --libs-only-l libffi")
+    execute_process (COMMAND "C:/Users/User/vcpkg/packages/pkgconf_x64-windows/tools/pkgconf/pkgconf.exe" --msvc-syntax --libs-only-l libffi
+                     OUTPUT_VARIABLE FFI_LINK_FLAGS
+                     OUTPUT_STRIP_TRAILING_WHITESPACE)
+    message(STATUS "FFI_LINK_FLAGS: ${FFI_LINK_FLAGS}")
+
+    message (STATUS "populating FFI_LIB_FLAGS from pkgconf.exe --msvc-syntax --libs-only-L libffi")
+    execute_process (COMMAND "C:/Users/User/vcpkg/packages/pkgconf_x64-windows/tools/pkgconf/pkgconf.exe" --msvc-syntax --libs-only-L libffi
+                     OUTPUT_VARIABLE FFI_LIB_FLAGS
+                     OUTPUT_STRIP_TRAILING_WHITESPACE)
+    message(STATUS "FFI_LIB_FLAGS: ${FFI_LIB_FLAGS}")
+
+#    message (STATUS "checking pkgconf.exe --variable pc_path pkg-config")
+#    execute_process (COMMAND "C:/Users/User/vcpkg/packages/pkgconf_x64-windows/tools/pkgconf/pkgconf.exe" --variable pc_path pkg-config
+#                     OUTPUT_VARIABLE PKG_CONFIG_PC_PATH
+#                     OUTPUT_STRIP_TRAILING_WHITESPACE)
+#    message (STATUS "PKG_CONFIG_PC_PATH: ${PKG_CONFIG_PC_PATH}")
+
+    message (STATUS "VCPKG_APPLOCAL_DEPS: ${VCPKG_APPLOCAL_DEPS}")
+    message (STATUS "VCPKG_CHAINLOAD_TOOLCHAIN_FILE: ${VCPKG_CHAINLOAD_TOOLCHAIN_FILE}")
+    message (STATUS "VCPKG_PREFER_SYSTEM_LIBS: ${VCPKG_PREFER_SYSTEM_LIBS}")
+    message (STATUS "Z_VCPKG_POWERSHELL_PATH: ${Z_VCPKG_POWERSHELL_PATH}")
+    set (DALEC_LIBDIR_FLAGS_ "$ENV{LDFLAGS} ${FFI_LIB_FLAGS} ${FFI_LINK_FLAGS}")
+    message (STATUS "DALEC_LIBDIR_FLAGS_: ${DALEC_LIBDIR_FLAGS_}")
+    set (DALEC_LIB_FLAGS_    "")
+else()
+    message (STATUS "FFI_LDFLAGS: ${FFI_LDFLAGS}")
+    message (STATUS "DALEC_LIBDIR_FLAGS_: ${DALEC_LIBDIR_FLAGS_}")
+    set (DALEC_LIBDIR_FLAGS_ "$ENV{LDFLAGS} ${FFI_LDFLAGS}")
+    set (DALEC_LIB_FLAGS_    "")
+endif()
 
 if (${D_LLVM_VERSION_ORD} GREATER 34)
     set (DALEC_LIB_FLAGS_ ${LLVM_SYSTEM_LIBS})
 endif ()
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "FreeBSD")
-    set (DALEC_LINK_FLAGS_ "${DALEC_LIBDIR_FLAGS_} -L/usr/local/lib ${DALEC_LIB_FLAGS_}")
-else ()
-    set (DALEC_LINK_FLAGS_ "${DALEC_LIBDIR_FLAGS_} ${DALEC_LIB_FLAGS_} -ldl")
-endif ()
+    set (DALEC_LINK_FLAGS "${DALEC_LIBDIR_FLAGS_} -L/usr/local/lib ${DALEC_LIB_FLAGS_}")
+elseif(CMAKE_HOST_SYSTEM_NAME STREQUAL "Windows")
+    #                                        ignore DALEC_LIB_FLAGS_
+    set (DALEC_LINK_FLAGS "${DALEC_LIBDIR_FLAGS_} ${DALEC_LIB_FLAGS_}")
+else()
+    set (DALEC_LINK_FLAGS "${DALEC_LIBDIR_FLAGS_} ${DALEC_LIB_FLAGS_} -ldl")
+endif()
+string(REGEX REPLACE "^ +" "" DALEC_LINK_FLAGS ${DALEC_LINK_FLAGS})
+separate_arguments(DALEC_LINK_FLAGS NATIVE_COMMAND ${DALEC_LINK_FLAGS})
+message (STATUS "DALEC_LINK_FLAGS: ${DALEC_LINK_FLAGS}")
+
+
+if(CMAKE_HOST_SYSTEM_NAME STREQUAL "Windows")
+    set (STD_CXX_11 "/std:c++11")
+    set (STD_CXX_14 "/std:c++14")
+else()
+    set (STD_CXX_11 "-std=c++11")
+    set (STD_CXX_14 "-std=c++14")
+endif()
 
 # LLVM 3.5 relies on C++11, and LLVM 10.0 relies on C++14.
 if (${D_LLVM_VERSION_ORD} GREATER_EQUAL 100)
-    set (CXX_FLAGS_EXTRA "-std=c++14")
+    set (CXX_FLAGS_EXTRA STD_CXX_14)
 elseif (${D_LLVM_VERSION_ORD} GREATER_EQUAL 35)
-    set (CXX_FLAGS_EXTRA "-std=c++11")
+    set (CXX_FLAGS_EXTRA STD_CXX_11)
 else ()
     set (CXX_FLAGS_EXTRA "")
 endif ()
 
-string(REGEX REPLACE "^ +" "" DALEC_LINK_FLAGS ${DALEC_LINK_FLAGS_})
 #https://stackoverflow.com/a/2274040
 if(CMAKE_COMPILER_IS_GNUCXX)
     message(STATUS "GCC detected")
-    set (CMAKE_CXX_FLAGS         "$ENV{CPPFLAGS} ${FFI_CFLAGS} -Wall -ansi")
+    set (CMAKE_CXX_FLAGS       "$ENV{CPPFLAGS} ${FFI_CFLAGS} -Wall -ansi")
     set (CMAKE_CXX_FLAGS_DEBUG "-g -ggdb -O0 -fno-rtti -fno-inline -Wextra -Wno-unused-parameter ${CXX_FLAGS_EXTRA}")
 else ()
     message(STATUS "not gcc")
-    set (CMAKE_CXX_FLAGS         "$ENV{CPPFLAGS} ${FFI_CFLAGS}")
-    set (CMAKE_CXX_FLAGS_DEBUG "/Wall")
-endif(CMAKE_COMPILER_IS_GNUCXX)
+    set (CMAKE_CXX_FLAGS       "$ENV{CPPFLAGS} ${FFI_CFLAGS} /W1 /WL")
+    set (CMAKE_CXX_FLAGS_DEBUG "")
+endif()
 
 set (CMAKE_CXX_FLAGS_RELEASE "-O3 -fno-rtti -fomit-frame-pointer ${CXX_FLAGS_EXTRA}")
 
@@ -310,19 +511,26 @@ add_library(dale SHARED
                  src/dale/Form/Value/Value.cpp)
 set_target_properties (dale PROPERTIES VERSION ${Dale_VERSION})
 set_target_properties (dale PROPERTIES SOVERSION ${Dale_VERSION_MAJOR})
-set_target_properties (dale PROPERTIES COMPILE_FLAGS "${LLVM_CXX_FLAGS} -I.")
-set_target_properties (dale PROPERTIES LINK_FLAGS "${DALEC_LINK_FLAGS} ${LLVM_LINK_FLAGS} -rdynamic")
-target_link_libraries (dale ${LLVM_LIBS} ${DALEC_LINK_FLAGS} ${LLVM_LINK_FLAGS})
+set_target_properties (dale PROPERTIES COMPILE_FLAGS "${LLVM_CXX_FLAGS} -I. -I${SOURCE_PATH}/lib")
+
+if(CMAKE_HOST_SYSTEM_NAME STREQUAL "Windows")
+    set_target_properties (dale PROPERTIES LINK_FLAGS "${FFI_LIB_FLAGS} ${FFI_LINK_FLAGS} ${LLVM_LINK_FLAGS}")
+    target_link_libraries (dale ${LLVM_LIBS} ${LLVM_LINK_FLAGS})
+else()
+    set_target_properties (dale PROPERTIES LINK_FLAGS "${DALEC_LINK_FLAGS} ${LLVM_LINK_FLAGS} -rdynamic")
+    target_link_libraries (dale ${LLVM_LIBS} ${DALEC_LINK_FLAGS} ${LLVM_LINK_FLAGS})
+endif()
+
 install (TARGETS dale LIBRARY DESTINATION lib)
 
 add_executable(daleci src/dale/daleci.cpp)
 target_link_libraries (daleci dale)
-set_target_properties (daleci PROPERTIES COMPILE_FLAGS "${LLVM_CXX_FLAGS} -I.")
+set_target_properties (daleci PROPERTIES COMPILE_FLAGS "/options:strict ${LLVM_CXX_FLAGS} -I. -I${SOURCE_PATH}/lib")
 install (TARGETS daleci DESTINATION bin)
 
 add_executable(dalec src/dale/dalec.cpp)
 target_link_libraries (dalec dale)
-set_target_properties (dalec PROPERTIES COMPILE_FLAGS "${LLVM_CXX_FLAGS} -I.")
+set_target_properties (dalec PROPERTIES COMPILE_FLAGS "/options:strict ${LLVM_CXX_FLAGS} -I. -I${SOURCE_PATH}/lib")
 install (TARGETS dalec DESTINATION bin)
 
 # Run tests.

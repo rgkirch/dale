@@ -29,7 +29,7 @@ int Lexer::getchar_() {
         if (line_buffered) {
             char *line = NULL;
             size_t allocated = 0;
-            bytes = getline(&line, &allocated, file);
+//            bytes = getline(&line, &allocated, file);
             if (!bytes) {
                 return EOF;
             }

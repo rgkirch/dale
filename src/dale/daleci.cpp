@@ -1,6 +1,11 @@
+#ifdef __unix__
 #include <getopt.h>
+#endif
+
 #include <sys/stat.h>
+#ifdef __unix__
 #include <unistd.h>
+#endif
 
 #include <cstdio>
 #include <cstdlib>

@@ -3,8 +3,10 @@
 
 #include <sys/stat.h>
 #include <sys/types.h>
-#include <unistd.h>
 
+#ifdef __unix__
+#include <unistd.h>
+#endif
 #include <algorithm>
 #include <map>
 #include <set>
@@ -76,7 +78,7 @@ Reader::Reader(std::vector<const char *> *module_directory_paths,
                std::vector<const char *> *include_directory_paths,
                std::vector<const char *> *static_module_names,
                bool static_modules_all, bool remove_macros) {
-    cwd = getcwd(NULL, 0);
+    //    cwd = getcwd(NULL, 0);
     this->module_directory_paths.push_back(cwd);
     std::copy(module_directory_paths->begin(),
               module_directory_paths->end(),

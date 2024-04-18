@@ -1,6 +1,9 @@
-#include <getopt.h>
+#include <getopt.c>
+
 #include <sys/stat.h>
+#ifdef __unix__
 #include <unistd.h>
+#endif
 
 #include <cstdio>
 #include <cstdlib>
@@ -66,7 +69,11 @@ void copyRuntimeToCompileTime(std::vector<const char *> *run_libs,
         char command[256];
         snprintf(command, sizeof(command), "ld -t %s 2>/dev/null",
                  libname);
+#ifdef __unix__
         fp = popen(command, "r");
+#elif __unix__
+        fp = _popen(command, "r");
+#endif
         if (fp == NULL) {
             fprintf(stderr, "Unable to resolve library path");
             abort();
